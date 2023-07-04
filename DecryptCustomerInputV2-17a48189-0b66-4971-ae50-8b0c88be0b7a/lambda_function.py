@@ -2,9 +2,7 @@
 import base64
 
 import boto3
-import requests
-import Crypto
-# from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 
 
 PAD = lambda s: s + (32 - len(s) % 32) * ' '
@@ -45,7 +43,7 @@ def decrypt_data(aws_data, encrypted_data, cipher_text_blob):
     return cypher.decrypt(base64.b64decode(encrypted_data)).rstrip()
 
 
-def main():
+def lambda_handler(event, context):
     # Add your account number / region / KMS Key ID here.
     aws_data = {
         'region': 'us-east-1',
@@ -63,6 +61,3 @@ def main():
     # # Later on when you need to decrypt, get these from your persistent storage.
     decrypted_data = decrypt_data(aws_data, encrypted_data, cipher_text_blob)
     print(decrypted_data)
-
-if __name__ == '__main__':
-    main()
